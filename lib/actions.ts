@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { prisma } from "./prisma";
 import { RegisterType } from "./types";
 import bcrypt from "bcrypt";
@@ -26,4 +27,5 @@ export async function registerAction(data: RegisterType) {
       email,
     },
   });
+  redirect("/home");
 }
