@@ -1,3 +1,4 @@
+import { signIn } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 function CardDemo() {
   return (
@@ -21,7 +23,9 @@ function CardDemo() {
             Enter your email below to login to your account
           </CardDescription>
           <CardAction>
-            <Button variant="link">Sign Up</Button>
+            <Button asChild variant="link">
+              <Link href={"/register"}>Sign Up</Link>
+            </Button>
           </CardAction>
         </CardHeader>
         <CardContent>
@@ -51,19 +55,26 @@ function CardDemo() {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-          <div className="flex items-center justify-center space-x-1.5">
-          <Button variant="outline" className="w-full">
-            Google
-          </Button>
-        <Button variant="outline" className="w-full">
-            Github
-          </Button>
-          </div>
-        </CardFooter>
+        <form
+          action={async () => {
+            "use server";
+            await signIn("google", { redirectTo: "/protected" });
+          }}
+        >
+          <CardFooter className="flex-col gap-2">
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+            <div className="flex items-center justify-center space-x-1.5">
+              <Button variant="outline" className="w-full">
+                Google
+              </Button>
+              <Button variant="outline" className="w-full">
+                Github
+              </Button>
+            </div>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );
