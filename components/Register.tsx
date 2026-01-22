@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +15,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerFromSchema, registerFromType } from "@/lib/types";
 import { registerAction } from "@/lib/actions";
+import { useTransition } from "react";
 
 export function RegisterPage() {
+  const [pending, startTransition] = useTransition();
   const {
     register,
     handleSubmit,
@@ -26,12 +28,14 @@ export function RegisterPage() {
     resolver: zodResolver(registerFromSchema),
   });
 
-  const onSubmit = async (data: registerFromType) => {
-    const res = await registerAction(data);
-    if(res?.error){
-      setError("email", {message: res.error})
-      return;
-    }
+  const onSubmit = (data: registerFromType) => {
+    startTransition(async () => {
+      const res = await registerAction(data);
+      if (res?.error) {
+        setError("email", { message: res.error });
+        return;
+      }
+    });
   };
 
   return (
@@ -74,16 +78,30 @@ export function RegisterPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required {...register("password")}/>
-                 {errors.password && (
-                  <p className="text-xs text-red-500">{errors.password.message}</p>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  {...register("password")}
+                />
+                {errors.password && (
+                  <p className="text-xs text-red-500">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="confirmPass">Confirm Password</Label>
-                <Input id="confirmPass" type="password" required {...register("confirmPassword")}/>
-                 {errors.confirmPassword && (
-                  <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+                <Input
+                  id="confirmPass"
+                  type="password"
+                  required
+                  {...register("confirmPassword")}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-xs text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -91,13 +109,11 @@ export function RegisterPage() {
         </CardContent>
 
         <CardFooter className="flex-col gap-2">
-          <Button form="register-form" type="submit" className="w-full">
-            Submit
+          <Button disabled={pending}  form="register-form" type="submit" className="w-full">
+           {pending ? "Creating account" : "Register"}
           </Button>
         </CardFooter>
       </Card>
     </div>
   );
 }
-
-
