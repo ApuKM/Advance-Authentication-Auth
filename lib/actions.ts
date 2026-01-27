@@ -6,6 +6,7 @@ import { logInFormType, RegisterType } from "./types";
 import bcrypt from "bcrypt";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export async function registerAction(data: RegisterType) {
   const { name, email, password } = data;
@@ -35,7 +36,13 @@ export async function registerAction(data: RegisterType) {
 
 export async function loginAction(data: logInFormType){
   try {
-    await signIn("credentials", data);
+    // console.log(data);    
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    });
+    
   } catch (error) {
    if(error instanceof AuthError){
     switch (error.type){

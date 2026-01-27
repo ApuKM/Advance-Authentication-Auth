@@ -25,6 +25,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       authorize: async (credentials) => {
         try {
+          // console.log("CREDENTIALS:", credentials);
           const parsedCredentials = logInFormSchema.safeParse(credentials);
           if (parsedCredentials.success) {
             const { email, password } = parsedCredentials.data;

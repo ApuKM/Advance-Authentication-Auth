@@ -16,7 +16,6 @@ import { loginAction } from "@/lib/actions";
 import { logInFormSchema, logInFormType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -37,7 +36,6 @@ function LogInPage() {
         setError("root", { message: res });
         return;
       }
-       redirect("/protected");
     });
   };
 
