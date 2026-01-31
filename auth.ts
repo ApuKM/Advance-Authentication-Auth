@@ -3,8 +3,10 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./lib/prisma";
 import authConfig from "./auth.config";
 import Credentials from "next-auth/providers/credentials";
-import { logInFormSchema } from "./lib/types";
+import { logInFormSchema } from "./types/types";
 import bcrypt from "bcrypt";
+import Github from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 
 async function getUser(email: string) {
   try {
@@ -22,6 +24,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   ...authConfig,
   providers: [
+    Github({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET
+    }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET
+    }),
     Credentials({
       authorize: async (credentials) => {
         try {

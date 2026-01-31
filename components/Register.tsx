@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerFromSchema, registerFromType } from "@/lib/types";
+import { registerFromSchema, registerFromType } from "@/types/types";
 import { registerAction } from "@/lib/actions";
 import { useTransition } from "react";
 

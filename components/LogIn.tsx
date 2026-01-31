@@ -13,11 +13,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginAction } from "@/lib/actions";
-import { logInFormSchema, logInFormType } from "@/lib/types";
+import { logInFormSchema, logInFormType } from "@/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import Social from "./Social";
 
 function LogInPage() {
   const [pending, startTransition] = useTransition();
@@ -54,7 +55,8 @@ function LogInPage() {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
+          <form id="login-form" onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -98,14 +100,7 @@ function LogInPage() {
           <Button type="submit" form="login-form" className="w-full">
             {pending ? "Logging in" : "log In"}
           </Button>
-          <div className="flex items-center justify-center space-x-1.5">
-            <Button variant="outline" className="w-full">
-              Google
-            </Button>
-            <Button variant="outline" className="w-full">
-              Github
-            </Button>
-          </div>
+          <Social />
         </CardFooter>
 
         {errors.root && (

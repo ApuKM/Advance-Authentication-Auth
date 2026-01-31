@@ -2,18 +2,18 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "./prisma";
-import { logInFormType, RegisterType } from "./types";
+import { logInFormType, RegisterType } from "../types/types";
 import bcrypt from "bcrypt";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { findUserByEmail } from "./users";
+
 
 export async function registerAction(data: RegisterType) {
   const { name, email, password } = data;
 
-  const existingUser = await prisma.user.findUnique({
-    where: { email },
-  });
+  const existingUser = await findUserByEmail(email);
 
   if (existingUser) {
     return {
@@ -28,6 +28,8 @@ export async function registerAction(data: RegisterType) {
       name,
       password: hashedPassword,
       email,
+      // Mark email as verified for this demo so users can sign in immediately
+      emailVerified: true,
     },
   });
   redirect("/home");
