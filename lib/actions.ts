@@ -28,8 +28,6 @@ export async function registerAction(data: RegisterType) {
       name,
       password: hashedPassword,
       email,
-      // Mark email as verified for this demo so users can sign in immediately
-      emailVerified: true,
     },
   });
   redirect("/home");

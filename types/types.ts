@@ -27,3 +27,7 @@ import * as z from "zod";
   })
 
   export type logInFormType = z.infer<typeof logInFormSchema>
+
+ export type SocialProps = {
+  page: "protected" | "login";
+};

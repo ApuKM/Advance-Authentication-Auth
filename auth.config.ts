@@ -1,10 +1,19 @@
 import type { NextAuthConfig } from "next-auth";
 import { findUserById } from "./lib/users";
+import { prisma } from "./lib/prisma";
 
 // Notice this is only an object, not a full Auth.js instance
 export default {
   pages: {
     signIn: "/login",
+  },
+  events: {
+    async linkAccount({user}){
+      await prisma.user.update({
+        where: {id: user.id},
+        data: {emailVerified: new Date()}
+      })
+    }
   },
   callbacks: {
     // async signIn({ user }) {
@@ -21,7 +30,7 @@ export default {
       if (token.role && session.user) {
         session.user.role = token.role as "USER" | "ADMIN";
       }
-      console.log(session);
+      // console.log(session);
       return session;
     },
     async jwt({ token }) {

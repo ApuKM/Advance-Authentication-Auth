@@ -19,9 +19,16 @@ import Link from "next/link";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import Social from "./Social";
+import { useSearchParams } from "next/navigation";
 
 function LogInPage() {
   const [pending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email is already in use with different provider!"
+      : "";
+
   const {
     register,
     handleSubmit,
@@ -55,8 +62,7 @@ function LogInPage() {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <form id="login-form" onSubmit={handleSubmit(onSubmit)}
-          >
+          <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -100,13 +106,15 @@ function LogInPage() {
           <Button type="submit" form="login-form" className="w-full">
             {pending ? "Logging in" : "log In"}
           </Button>
-          <Social />
+          <Social page={"login"} />
         </CardFooter>
 
-        {errors.root && (
+        {errors.root ? (
           <p className="text-xs text-red-500 text-center">
             {errors.root.message}
           </p>
+        ) : (
+          <p className="text-xs text-red-500 text-center">{urlError}</p>
         )}
       </Card>
     </div>
